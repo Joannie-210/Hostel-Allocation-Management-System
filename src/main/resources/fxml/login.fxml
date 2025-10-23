@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.LoginController"
+            prefWidth="400" prefHeight="300">
+    <children>
+        <VBox alignment="CENTER" spacing="10" prefWidth="300" layoutX="50" layoutY="50">
+            <Label text="Hostel Allocation Login" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <TextField fx:id="usernameField" promptText="Email or Reg No"/>
+            <PasswordField fx:id="passwordField" promptText="Password"/>
+            <ChoiceBox fx:id="roleChoice"/>
+            <Button text="Login" onAction="#handleLogin"/>
+            <Hyperlink text="Create account" onAction="#goToRegister"/>
+            <Label fx:id="messageLabel" textFill="red"/>
+        </VBox>
+    </children>
+</AnchorPane>
