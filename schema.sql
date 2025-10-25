@@ -1,5 +1,8 @@
 PRAGMA foreign_keys = ON;
 
+ALTER TABLE students ADD COLUMN phone TEXT;
+ALTER TABLE students ADD COLUMN department TEXT;
+
 -- Drop existing tables safely (reverse dependency order)
 DROP VIEW IF EXISTS hostel_dashboard;
 DROP TABLE IF EXISTS allocations;
@@ -70,7 +73,7 @@ END;
 CREATE INDEX IF NOT EXISTS idx_rooms_hostel ON rooms(hostel_id);
 
 ------------------------------------------------------------
--- 3. STUDENTS TABLE
+-- 3. STUDENTS TABLE (updated with phone and department)
 ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,6 +83,8 @@ CREATE TABLE IF NOT EXISTS students (
     gender TEXT CHECK(gender IN ('Male', 'Female')) NOT NULL,
     level TEXT,
     password TEXT NOT NULL,
+    phone TEXT,
+    department TEXT,
     room_id INTEGER,
     role TEXT NOT NULL DEFAULT 'Student',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

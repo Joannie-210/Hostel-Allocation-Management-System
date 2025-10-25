@@ -23,10 +23,11 @@ public class UserDAO {
         }
     }
 
-    public static boolean registerUser(String name, String email, String regNo, String password, String gender, String role) {
-        String query = "INSERT INTO students (name, email, reg_no, password, gender, role) VALUES (?, ?, ?, ?, ?, ?)";
+    public static boolean registerUser(String name, String email, String regNo, String password, String gender, String role, String phone, String department) {
+        String sql = "INSERT INTO students (name, email, reg_no, password, gender, role, phone, department) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DBUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, name);
             stmt.setString(2, email);
@@ -34,11 +35,14 @@ public class UserDAO {
             stmt.setString(4, password);
             stmt.setString(5, gender);
             stmt.setString(6, role);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
+            stmt.setString(7, phone);
+            stmt.setString(8, department);
+
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
 }

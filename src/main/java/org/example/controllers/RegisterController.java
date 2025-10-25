@@ -15,6 +15,9 @@ public class RegisterController {
 
     @FXML private TextField nameField;
     @FXML private TextField emailField;
+    @FXML private TextField phoneField;
+    @FXML private TextField departmentField;
+
     // Removed regNoField — now generated automatically
     @FXML private PasswordField passwordField;
     @FXML private ChoiceBox<String> genderChoice;
@@ -32,6 +35,8 @@ public class RegisterController {
         String name = nameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
+        String phone = phoneField.getText();
+        String department = departmentField.getText();
         String gender = genderChoice.getValue();
         String role = roleChoice.getValue();
 
@@ -45,7 +50,7 @@ public class RegisterController {
             String regNo = RegNumberGenerator.generateRegNumber(conn);
 
             String hashed = PasswordUtil.hashPassword(password);
-            boolean success = UserDAO.registerUser(name, email, regNo, hashed, gender, role);
+            boolean success = UserDAO.registerUser(name, email, regNo, hashed, gender, role, phone, department);
 
             if (success) {
                 messageLabel.setText("✅ Registration successful. Your Reg No: " + regNo);
