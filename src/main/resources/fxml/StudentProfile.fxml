@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.StudentProfileController"
+      spacing="10" alignment="CENTER" padding="20">
+
+    <Label text="Student Profile" style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+    <TextField fx:id="nameField" promptText="Full Name"/>
+    <TextField fx:id="emailField" promptText="Email"/>
+    <ChoiceBox fx:id="genderChoice"/>
+    <TextField fx:id="phoneField" promptText="Phone"/>
+    <TextField fx:id="departmentField" promptText="Department"/>
+    <TextField fx:id="levelField" promptText="Level"/>
+    <PasswordField fx:id="passwordField" promptText="Password (optional)"/>
+    <Button text="Update" onAction="#handleUpdate"/>
+    <Label fx:id="messageLabel"/>
+</VBox>

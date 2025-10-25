@@ -20,8 +20,9 @@ public class DashboardAdminController {
 
     public void showManageStudents() {
         headerTitle.setText("Manage Students");
-        contentArea.getChildren().setAll(new Text("👥 Here you can manage student allocations"));
+        loadContent("/fxml/AdminStudents.fxml");
     }
+
 
     public void showManageHostels() {
         headerTitle.setText("Manage Hostels");

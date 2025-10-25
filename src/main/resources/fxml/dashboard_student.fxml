@@ -32,6 +32,8 @@
               style="-fx-background-color: #004d40; -fx-padding: 20; -fx-pref-width: 200;">
             <Button text="Overview" onAction="#showOverview"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button text="Profile" onAction="#showProfile"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="My Room" onAction="#showRoomDetails"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Payment Status" onAction="#showPaymentStatus"
