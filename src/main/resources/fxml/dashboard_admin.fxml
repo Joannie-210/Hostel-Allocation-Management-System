@@ -2,7 +2,6 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
@@ -34,11 +33,14 @@
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Manage Students" onAction="#showManageStudents"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button text="Manage Hostels" onAction="#showManageHostels"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Manage Rooms" onAction="#showManageRooms"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Reports" onAction="#showReports"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
         </VBox>
+
     </left>
 
     <!-- MAIN CONTENT -->

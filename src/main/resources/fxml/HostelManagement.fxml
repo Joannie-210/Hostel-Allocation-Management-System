@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.HostelController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <!-- TableView for Hostels -->
+    <TableView fx:id="hostelTable" prefHeight="300">
+        <columns>
+            <TableColumn text="ID" fx:id="colId"/>
+            <TableColumn text="Name" fx:id="colName"/>
+            <TableColumn text="Gender" fx:id="colGender"/>
+            <TableColumn text="Total Rooms" fx:id="colTotalRooms"/>
+            <TableColumn text="Total Capacity" fx:id="colTotalCapacity"/>
+            <TableColumn text="Occupied Beds" fx:id="colOccupiedBeds"/>
+            <TableColumn text="Warden Name" fx:id="colWardenName"/>
+            <TableColumn text="Contact Number" fx:id="colContactNumber"/>
+            <TableColumn text="Description" fx:id="colDescription"/>
+        </columns>
+    </TableView>
+
+    <!-- Input fields -->
+    <GridPane hgap="10" vgap="10">
+        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Gender:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtGender" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Total Rooms:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTotalRooms" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Total Capacity:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtTotalCapacity" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Label text="Occupied Beds:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtOccupiedBeds" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Warden Name:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtWardenName" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+        <Label text="Contact Number:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtContactNumber" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Description:" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtDescription" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox spacing="10">
+        <Button text="Add" fx:id="btnAdd"/>
+        <Button text="Edit" fx:id="btnEdit"/>
+        <Button text="Delete" fx:id="btnDelete"/>
+        <Button text="Clear" fx:id="btnClear"/>
+    </HBox>
+</VBox>

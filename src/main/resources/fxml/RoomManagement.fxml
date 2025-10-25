@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.RoomController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <!-- TableView for Rooms -->
+    <TableView fx:id="roomTable" prefHeight="300">
+        <columns>
+            <TableColumn text="ID" fx:id="colId"/>
+            <TableColumn text="Room Number" fx:id="colRoomNumber"/>
+            <TableColumn text="Hostel ID" fx:id="colHostelId"/>
+            <TableColumn text="Type" fx:id="colType"/>
+            <TableColumn text="Available" fx:id="colAvailable"/>
+        </columns>
+    </TableView>
+
+    <!-- Input fields -->
+    <GridPane hgap="10" vgap="10">
+        <Label text="Room Number:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtRoomNumber" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Hostel ID:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtHostelId" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Type:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtType" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Available:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <CheckBox fx:id="chkAvailable" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox spacing="10">
+        <Button text="Add" fx:id="btnAdd"/>
+        <Button text="Edit" fx:id="btnEdit"/>
+        <Button text="Delete" fx:id="btnDelete"/>
+        <Button text="Clear" fx:id="btnClear"/>
+    </HBox>
+</VBox>
