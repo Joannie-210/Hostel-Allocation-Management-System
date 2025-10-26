@@ -2,6 +2,8 @@ PRAGMA foreign_keys = ON;
 
 ALTER TABLE students ADD COLUMN phone TEXT;
 ALTER TABLE students ADD COLUMN department TEXT;
+ALTER TABLE rooms ADD COLUMN capacity INTEGER DEFAULT 1;
+ALTER TABLE rooms ADD COLUMN occupants INTEGER DEFAULT 0;
 
 -- Drop existing tables safely (reverse dependency order)
 DROP VIEW IF EXISTS hostel_dashboard;
@@ -44,6 +46,7 @@ CREATE TABLE IF NOT EXISTS rooms (
     hostel_id INTEGER NOT NULL,
     room_number TEXT NOT NULL,
     capacity INTEGER NOT NULL DEFAULT 1,
+    occupants INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(hostel_id) REFERENCES hostels(id) ON DELETE CASCADE
 );

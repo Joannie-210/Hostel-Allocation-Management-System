@@ -37,6 +37,8 @@
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Manage Rooms" onAction="#showManageRooms"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button text="Allocate Hostels" onAction="#showAllocateHostels"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
             <Button text="Reports" onAction="#showReports"
                     style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px;" />
         </VBox>

@@ -33,7 +33,10 @@ public class DashboardAdminController {
         headerTitle.setText("Manage Rooms");
         loadContent("/fxml/RoomManagement.fxml");
     }
-
+    public void showAllocateHostels() {
+        headerTitle.setText("Allocate Hostels");
+        loadContent("/fxml/allocate_room.fxml");
+    }
     public void showReports() {
         headerTitle.setText("Reports");
         contentArea.getChildren().setAll(new Text("📄 Generate and view reports"));
