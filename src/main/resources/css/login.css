@@ -1,0 +1,65 @@
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 28;
+    -fx-spacing: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 12, 0, 0, 3);
+}
+
+.title {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a237e;
+}
+
+.subtitle {
+    -fx-font-size: 20px;
+    -fx-text-fill: #111;
+}
+
+.input {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 8;
+}
+
+.input:focused {
+    -fx-background-color: white;
+    -fx-border-color: #1a237e;
+}
+
+.btn {
+    -fx-background-color: #1a237e;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+
+.btn:hover {
+    -fx-background-color: #283593;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.link {
+    -fx-text-fill: #1a237e;
+    -fx-font-size: 12px;
+}
+
+.text {
+    -fx-text-fill: #444;
+    -fx-font-size: 12px;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 480px) {
+    .card {
+        -fx-padding: 18;
+        -fx-background-radius: 10;
+    }
+    .title {
+        -fx-font-size: 18px;
+    }
+}

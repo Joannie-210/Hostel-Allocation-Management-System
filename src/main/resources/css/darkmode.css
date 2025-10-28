@@ -1,0 +1,26 @@
+/* Automatically switches when system dark mode is active */
+.root:dark {
+    -fx-background-color: linear-gradient(to bottom right, #121212, #1e1e1e);
+}
+
+.root:dark .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.root:dark .hyperlink {
+    -fx-text-fill: #90caf9;
+}
+
+.root:dark .text-field,
+.root:dark .password-field,
+.root:dark .choice-box {
+    -fx-background-color: #2c2c2c;
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #888;
+    -fx-border-color: #444;
+}
+
+.root:dark .button {
+    -fx-background-color: #3949ab;
+    -fx-text-fill: white;
+}

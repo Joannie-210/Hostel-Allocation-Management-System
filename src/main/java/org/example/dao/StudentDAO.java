@@ -95,5 +95,20 @@ public class StudentDAO {
             e.printStackTrace();
         }
         return null;
+
     }
+    public static boolean deleteStudent(String regNo) {
+        String query = "DELETE FROM students WHERE regNo = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, regNo);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // true if deletion succeeded
+        } catch (SQLException e) {
+            System.err.println("❌ Error deleting student: " + e.getMessage());
+            return false;
+        }
+    }
+
+
 }

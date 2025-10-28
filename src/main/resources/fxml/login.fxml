@@ -3,18 +3,31 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.controllers.LoginController"
-            prefWidth="400" prefHeight="300">
-    <children>
-        <VBox alignment="CENTER" spacing="10" prefWidth="300" layoutX="50" layoutY="50">
-            <Label text="Hostel Allocation Login" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <TextField fx:id="usernameField" promptText="Email or Reg No"/>
-            <PasswordField fx:id="passwordField" promptText="Password"/>
-            <ChoiceBox fx:id="roleChoice"/>
-            <Button text="Login" onAction="#handleLogin"/>
-            <Hyperlink text="Create account" onAction="#goToRegister"/>
-            <Label fx:id="messageLabel" textFill="red"/>
-        </VBox>
-    </children>
-</AnchorPane>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="org.example.controllers.LoginController"
+           prefWidth="420" prefHeight="400"
+           stylesheets="@../css/login.css">
+
+    <VBox alignment="CENTER" spacing="12" minWidth="260"
+          styleClass="card">
+
+
+        <Label text="Login" styleClass="subtitle"/>
+
+        <TextField fx:id="usernameField" promptText="Email or Registration No."
+                   styleClass="input"/>
+        <PasswordField fx:id="passwordField" promptText="Password"
+                       styleClass="input"/>
+
+        <ChoiceBox fx:id="roleChoice" styleClass="input"/>
+
+        <Button text="Login" onAction="#handleLogin" styleClass="btn"/>
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Don't have an account?" styleClass="text"/>
+            <Hyperlink text="Create one" onAction="#goToRegister" styleClass="link"/>
+        </HBox>
+
+        <Label fx:id="messageLabel" textFill="red" style="-fx-font-size: 11px;"/>
+    </VBox>
+</StackPane>
