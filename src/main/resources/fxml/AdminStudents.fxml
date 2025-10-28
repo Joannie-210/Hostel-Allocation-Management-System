@@ -26,6 +26,7 @@
             <TableColumn fx:id="departmentCol" text="Department" prefWidth="120"/>
             <TableColumn fx:id="levelCol" text="Level" prefWidth="80"/>
             <TableColumn fx:id="roomCol" text="Room ID" prefWidth="80"/>
+            <TableColumn fx:id="deleteCol" text="Action" prefWidth="80"/>
         </columns>
 
         <!-- Placeholder text when table is empty -->
