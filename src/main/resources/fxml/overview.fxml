@@ -1,0 +1,47 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.OverviewController"
+      spacing="15" style="-fx-padding: 20;">
+
+    <Label text="Overview Dashboard" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <HBox spacing="20">
+        <VBox>
+            <Label text="Total Hostels:" />
+            <Label fx:id="lblTotalHostels" />
+        </VBox>
+        <VBox>
+            <Label text="Total Rooms:" />
+            <Label fx:id="lblTotalRooms" />
+        </VBox>
+        <VBox>
+            <Label text="Total Students:" />
+            <Label fx:id="lblTotalStudents" />
+        </VBox>
+        <VBox>
+            <Label text="Allocated Rooms:" />
+            <Label fx:id="lblAllocatedRooms" />
+        </VBox>
+    </HBox>
+
+    <PieChart fx:id="allocationPieChart" prefHeight="200" prefWidth="300" />
+    <PieChart fx:id="studentDistributionChart" prefHeight="200" prefWidth="300" />
+
+    <BarChart fx:id="roomsBarChart" prefHeight="300" prefWidth="600">
+        <xAxis>
+            <CategoryAxis label="Hostels"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Rooms"/>
+        </yAxis>
+    </BarChart>
+
+</VBox>

@@ -9,14 +9,10 @@ public class DBUtil {
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
     private static Connection connection = null;
 
-    public static Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(URL);
-                System.out.println("✅ Connected to SQLite DB: " + DB_PATH);
-            }
-        } catch (SQLException e) {
-            System.err.println("❌ DB connection error: " + e.getMessage());
+    public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(URL);
+            System.out.println("✅ Connected to SQLite DB: " + DB_PATH);
         }
         return connection;
     }
