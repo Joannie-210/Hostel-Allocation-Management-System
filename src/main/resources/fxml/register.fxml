@@ -5,7 +5,7 @@
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="org.example.controllers.RegisterController"
-           prefWidth="420" prefHeight="460"
+           prefWidth="420" prefHeight="500"
            stylesheets="@../css/register.css">
 
     <VBox alignment="CENTER" spacing="12" prefWidth="300"
@@ -14,9 +14,11 @@
         <Label text="Create Account" styleClass="title"/>
         <Label text="Register to continue" styleClass="subtitle"/>
 
+        <!-- Input Fields -->
         <TextField fx:id="nameField" promptText="Full Name" styleClass="input"/>
         <TextField fx:id="emailField" promptText="Email" styleClass="input"/>
         <TextField fx:id="phoneField" promptText="Phone Number" styleClass="input"/>
+        <TextField fx:id="departmentField" promptText="Department" styleClass="input"/>
         <PasswordField fx:id="passwordField" promptText="Password" styleClass="input"/>
 
         <HBox spacing="8" alignment="CENTER">

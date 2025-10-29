@@ -45,10 +45,13 @@ public class StudentDAO {
 
     public static List<Student> getAllStudents() {
         List<Student> students = new ArrayList<>();
-        String sql = "SELECT * FROM students ORDER BY name ASC";
+        // Add WHERE clause to exclude admins
+        String sql = "SELECT * FROM students WHERE role IS NULL OR LOWER(role) != 'admin' ORDER BY name ASC";
+
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 students.add(new Student(
                         rs.getInt("id"),
@@ -69,6 +72,7 @@ public class StudentDAO {
         }
         return students;
     }
+
 
     public static Student getStudentById(int id) {
         String sql = "SELECT * FROM students WHERE id=?";

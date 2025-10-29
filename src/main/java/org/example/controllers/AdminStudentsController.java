@@ -1,5 +1,5 @@
 package org.example.controllers;
-
+import org.example.utils.DataChangeNotifier;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,13 +36,19 @@ public class AdminStudentsController {
         levelCol.setCellValueFactory(new PropertyValueFactory<>("level"));
         roomCol.setCellValueFactory(new PropertyValueFactory<>("roomId"));
 
-        // Load students from DB
-        studentTable.setItems(FXCollections.observableArrayList(StudentDAO.getAllStudents()));
+        // Load students from DB and filter out admins
+        studentTable.setItems(FXCollections.observableArrayList(
+                StudentDAO.getAllStudents()
+                        .stream()
+                        .filter(s -> !"admin".equalsIgnoreCase(s.getRole()))
+                        .toList()
+        ));
         studentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Add Delete button column
         addDeleteButtonToTable();
     }
+
 
     private void addDeleteButtonToTable() {
         Callback<TableColumn<Student, Void>, TableCell<Student, Void>> cellFactory = param -> new TableCell<>() {
@@ -57,6 +63,7 @@ public class AdminStudentsController {
                     if (deleted) {
                         // Remove student from table view
                         getTableView().getItems().remove(student);
+                        DataChangeNotifier.getInstance().notifyDataChanged(); // notify overview
                     }
                 });
             }

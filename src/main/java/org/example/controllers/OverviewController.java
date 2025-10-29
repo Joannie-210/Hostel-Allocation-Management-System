@@ -7,6 +7,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import org.example.utils.DBUtil;
+import org.example.utils.DataChangeNotifier;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -28,47 +29,58 @@ public class OverviewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadData();
+
+        // 🔁 Automatically refresh when other controllers change data
+        DataChangeNotifier.getInstance().addListener(this::loadData);
     }
 
     public void loadData() {
         try (Connection conn = DBUtil.getConnection()) {
+
+            // --- Fetch basic totals ---
             int totalHostels = getSingleValue(conn, "SELECT COUNT(*) FROM hostels");
             int totalRooms = getSingleValue(conn, "SELECT COUNT(*) FROM rooms");
-            int totalStudents = getSingleValue(conn, "SELECT COUNT(*) FROM students");
-            int allocatedRooms = getSingleValue(conn, "SELECT COUNT(*) FROM rooms WHERE allocated = 1");
-            int allocatedPercent = totalRooms == 0 ? 0 : (int)((allocatedRooms * 100.0) / totalRooms);
+            int totalStudents = getSingleValue(conn, "SELECT COUNT(*) FROM students WHERE role = 'Student'");
+            int allocatedRooms = getSingleValue(conn, "SELECT COUNT(DISTINCT room_id) FROM allocations");
+            int male = getSingleValue(conn, "SELECT COUNT(*) FROM students WHERE gender='Male' AND role='Student'");
+            int female = totalStudents - male;
 
+            int allocatedPercent = (totalRooms == 0) ? 0 : (int)((allocatedRooms * 100.0) / totalRooms);
+
+            // --- Update labels ---
             lblTotalHostels.setText(String.valueOf(totalHostels));
             lblTotalRooms.setText(String.valueOf(totalRooms));
             lblTotalStudents.setText(String.valueOf(totalStudents));
             lblAllocatedRooms.setText(allocatedPercent + "%");
 
-            // PieCharts
+            // --- Update PieChart: Room Allocation ---
             allocationPieChart.getData().setAll(
-                    new PieChart.Data("Allocated", allocatedPercent),
-                    new PieChart.Data("Available", 100 - allocatedPercent)
+                    new PieChart.Data("Allocated Rooms", allocatedRooms),
+                    new PieChart.Data("Available Rooms", totalRooms - allocatedRooms)
             );
 
-            int male = getSingleValue(conn, "SELECT COUNT(*) FROM students WHERE gender='Male'");
-            int female = totalStudents - male;
-
+            // --- Update PieChart: Student Gender Distribution ---
             studentDistributionChart.getData().setAll(
-                    new PieChart.Data("Male", male),
-                    new PieChart.Data("Female", female)
+                    new PieChart.Data("Male Students", male),
+                    new PieChart.Data("Female Students", female)
             );
 
-            // BarChart
+            // --- Update BarChart: Rooms per Hostel ---
             roomsBarChart.getData().clear();
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            String sql = "SELECT id, name FROM hostels ORDER BY id";
-            try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            series.setName("Rooms per Hostel");
+
+            String sql = "SELECT hostel_name, total_rooms FROM hostel_dashboard ORDER BY hostel_name";
+            try (PreparedStatement ps = conn.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int hostelId = rs.getInt("id");
-                    String hostelName = rs.getString("name");
-                    int roomCount = getSingleValue(conn, "SELECT COUNT(*) FROM rooms WHERE hostel_id = " + hostelId);
-                    series.getData().add(new XYChart.Data<>(hostelName, roomCount));
+                    series.getData().add(new XYChart.Data<>(
+                            rs.getString("hostel_name"),
+                            rs.getInt("total_rooms")
+                    ));
                 }
             }
+
             roomsBarChart.getData().add(series);
 
         } catch (Exception e) {

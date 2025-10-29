@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -7,6 +8,8 @@ import org.example.dao.*;
 import org.example.models.*;
 import java.sql.*;
 import java.util.*;
+import org.example.utils.DataChangeNotifier;
+
 
 public class AllocationController {
     @FXML private ComboBox<Student> studentCombo;
@@ -68,6 +71,7 @@ public class AllocationController {
             loadStudents();
             loadRooms();
             loadAllocations();
+            DataChangeNotifier.getInstance().notifyDataChanged();
         } else {
             showAlert("❌ Allocation failed — room may be full or student already assigned.");
         }

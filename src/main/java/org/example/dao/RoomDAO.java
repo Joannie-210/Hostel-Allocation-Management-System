@@ -10,14 +10,14 @@ public class RoomDAO {
 
     // CREATE
     public void addRoom(Room room) {
-        String sql = "INSERT INTO rooms(room_number, hostel_id, type, is_available) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO rooms (room_number, hostel_id, capacity, occupants) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, room.getRoomNumber());
             pstmt.setInt(2, room.getHostelId());
-            pstmt.setString(3, room.getType());
-            pstmt.setInt(4, room.isAvailable() ? 1 : 0);
+            pstmt.setInt(3, room.getCapacity());
+            pstmt.setInt(4, room.getOccupants());
 
             pstmt.executeUpdate();
             System.out.println("✅ Room added successfully.");
@@ -40,8 +40,9 @@ public class RoomDAO {
                 r.setId(rs.getInt("id"));
                 r.setRoomNumber(rs.getString("room_number"));
                 r.setHostelId(rs.getInt("hostel_id"));
-                r.setType(rs.getString("type"));
-                r.setAvailable(rs.getInt("is_available") == 1);
+                r.setCapacity(rs.getInt("capacity"));
+                r.setOccupants(rs.getInt("occupants"));
+                r.setCreatedAt(rs.getString("created_at"));
                 rooms.add(r);
             }
         } catch (SQLException e) {
@@ -53,14 +54,14 @@ public class RoomDAO {
 
     // UPDATE
     public void updateRoom(Room room) {
-        String sql = "UPDATE rooms SET room_number=?, hostel_id=?, type=?, is_available=? WHERE id=?";
+        String sql = "UPDATE rooms SET room_number=?, hostel_id=?, capacity=?, occupants=? WHERE id=?";
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, room.getRoomNumber());
             pstmt.setInt(2, room.getHostelId());
-            pstmt.setString(3, room.getType());
-            pstmt.setInt(4, room.isAvailable() ? 1 : 0);
+            pstmt.setInt(3, room.getCapacity());
+            pstmt.setInt(4, room.getOccupants());
             pstmt.setInt(5, room.getId());
 
             pstmt.executeUpdate();
