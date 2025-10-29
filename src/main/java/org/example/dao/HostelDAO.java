@@ -9,17 +9,22 @@ import java.util.List;
 public class HostelDAO {
     private static final String DB_URL = "jdbc:sqlite:db/hostel.db";
 
-    // CREATE
+    // CREATE: add a new hostel
     public void addHostel(Hostel hostel) {
-        String sql = "INSERT INTO hostels(name, gender, warden_name, contact_number, description) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO hostels(name, gender, total_rooms, total_capacity, occupied_beds, warden_name, contact_number, description) " +
+                "VALUES(?,?,?,?,?,?,?,?)";
+
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, hostel.getName());
             pstmt.setString(2, hostel.getGender());
-            pstmt.setString(3, hostel.getWardenName());
-            pstmt.setString(4, hostel.getContactNumber());
-            pstmt.setString(5, hostel.getDescription());
+            pstmt.setInt(3, hostel.getTotalRooms());
+            pstmt.setInt(4, hostel.getTotalCapacity());
+            pstmt.setInt(5, hostel.getOccupiedBeds());
+            pstmt.setString(6, hostel.getWardenName());
+            pstmt.setString(7, hostel.getContactNumber());
+            pstmt.setString(8, hostel.getDescription());
 
             pstmt.executeUpdate();
             System.out.println("✅ Hostel added successfully.");
@@ -28,7 +33,7 @@ public class HostelDAO {
         }
     }
 
-    // READ all hostels
+    // READ: get all hostels
     public List<Hostel> getAllHostels() {
         List<Hostel> hostels = new ArrayList<>();
         String sql = "SELECT * FROM hostels";
@@ -57,18 +62,22 @@ public class HostelDAO {
         return hostels;
     }
 
-    // UPDATE hostel
+    // UPDATE: modify a hostel
     public void updateHostel(Hostel hostel) {
-        String sql = "UPDATE hostels SET name=?, gender=?, warden_name=?, contact_number=?, description=? WHERE id=?";
+        String sql = "UPDATE hostels SET name=?, gender=?, total_rooms=?, total_capacity=?, occupied_beds=?, warden_name=?, contact_number=?, description=? WHERE id=?";
+
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, hostel.getName());
             pstmt.setString(2, hostel.getGender());
-            pstmt.setString(3, hostel.getWardenName());
-            pstmt.setString(4, hostel.getContactNumber());
-            pstmt.setString(5, hostel.getDescription());
-            pstmt.setInt(6, hostel.getId());
+            pstmt.setInt(3, hostel.getTotalRooms());
+            pstmt.setInt(4, hostel.getTotalCapacity());
+            pstmt.setInt(5, hostel.getOccupiedBeds());
+            pstmt.setString(6, hostel.getWardenName());
+            pstmt.setString(7, hostel.getContactNumber());
+            pstmt.setString(8, hostel.getDescription());
+            pstmt.setInt(9, hostel.getId());
 
             pstmt.executeUpdate();
             System.out.println("✅ Hostel updated successfully.");
@@ -77,9 +86,10 @@ public class HostelDAO {
         }
     }
 
-    // DELETE hostel
+    // DELETE: remove a hostel
     public void deleteHostel(int hostelId) {
         String sql = "DELETE FROM hostels WHERE id=?";
+
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
