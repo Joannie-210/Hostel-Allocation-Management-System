@@ -1,7 +1,6 @@
 package org.example.dao;
 
 import org.example.models.Hostel;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,43 @@ public class HostelDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Hostel> getHostelReports() {
+        List<Hostel> reports = new ArrayList<>();
+        String sql = """
+            SELECT 
+                h.id, 
+                h.name, 
+                h.total_capacity,
+                COUNT(r.id) AS totalRooms,
+                COALESCE(SUM(r.occupants), 0) AS totalOccupants,
+                SUM(CASE WHEN r.occupants < r.capacity THEN 1 ELSE 0 END) AS availableRooms
+            FROM hostels h
+            LEFT JOIN rooms r ON h.id = r.hostel_id
+            GROUP BY h.id, h.name, h.total_capacity
+        """;
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Hostel hostel = new Hostel(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("total_capacity"),
+                        rs.getInt("totalRooms"),
+                        rs.getInt("totalOccupants"),
+                        rs.getInt("availableRooms")
+                );
+                reports.add(hostel);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reports;
     }
 
     // READ: get all hostels

@@ -2,80 +2,85 @@ package org.example.controllers;
 
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import org.example.dao.ReportDAO;
-import org.example.models.Report;
+import org.example.dao.ReportsDAO;
+import org.example.models.Hostel;
 
 public class ReportsController {
 
-    @FXML private Label totalHostelsLabel;
-    @FXML private Label totalRoomsLabel;
-    @FXML private Label totalCapacityLabel;
-    @FXML private Label occupiedBedsLabel;
-    @FXML private Label availableBedsLabel;
+    @FXML private VBox summaryCard, capacityCard, rateCard;
+    @FXML private Label lblTotalHostels, lblTotalRooms, lblTotalStudents, lblTotalCapacity, lblOccupiedBeds, lblAvailableBeds, lblAvgOccupancy;
 
-    @FXML private PieChart bedsPieChart;
-    @FXML private TableView<Report> hostelTable;
-    @FXML private TableColumn<Report, String> colHostelName;
-    @FXML private TableColumn<Report, Integer> colTotalRooms;
-    @FXML private TableColumn<Report, Integer> colTotalCapacity;
-    @FXML private TableColumn<Report, Integer> colOccupied;
-    @FXML private TableColumn<Report, Integer> colAvailable;
-    @FXML private VBox contentBox;
-    @FXML private Button btnRefresh;
+    @FXML private TableView<Hostel> reportTable;
+    @FXML private TableColumn<Hostel, String> hostelNameCol;
+    @FXML private TableColumn<Hostel, String> genderCol;
+    @FXML private TableColumn<Hostel, Integer> totalRoomsCol;
+    @FXML private TableColumn<Hostel, Integer> totalCapacityCol;
+    @FXML private TableColumn<Hostel, Integer> occupiedBedsCol;
+    @FXML private TableColumn<Hostel, Integer> availableBedsCol;
+    @FXML private TableColumn<Hostel, Double> occupancyRateCol;
+    @FXML private PieChart occupancyChart;
 
-    private final ReportDAO reportDAO = new ReportDAO();
+    private ReportsDAO reportsDAO = new ReportsDAO();
 
     @FXML
     public void initialize() {
         setupTable();
-        loadReport();
-
-        // 🔄 Add refresh button action
-        btnRefresh.setOnAction(e -> refreshWithAnimation());
+        loadReports();
+        fadeIn(summaryCard, capacityCard, rateCard, reportTable, occupancyChart);
     }
 
     private void setupTable() {
-        colHostelName.setCellValueFactory(new PropertyValueFactory<>("hostelName"));
-        colTotalRooms.setCellValueFactory(new PropertyValueFactory<>("totalRooms"));
-        colTotalCapacity.setCellValueFactory(new PropertyValueFactory<>("totalCapacity"));
-        colOccupied.setCellValueFactory(new PropertyValueFactory<>("occupiedBeds"));
-        colAvailable.setCellValueFactory(new PropertyValueFactory<>("availableBeds"));
+        hostelNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        genderCol.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        totalRoomsCol.setCellValueFactory(new PropertyValueFactory<>("totalRooms"));
+        totalCapacityCol.setCellValueFactory(new PropertyValueFactory<>("totalCapacity"));
+        occupiedBedsCol.setCellValueFactory(new PropertyValueFactory<>("occupiedBeds"));
+        availableBedsCol.setCellValueFactory(new PropertyValueFactory<>("availableBeds"));
+        occupancyRateCol.setCellValueFactory(new PropertyValueFactory<>("occupancyRate"));
     }
 
-    private void loadReport() {
-        Report summary = reportDAO.getOverallReport();
+    private void loadReports() {
+        ObservableList<Hostel> hostels = FXCollections.observableArrayList(reportsDAO.getHostelReports());
+        reportTable.setItems(hostels);
 
-        totalHostelsLabel.setText(String.valueOf(summary.getTotalHostels()));
-        totalRoomsLabel.setText(String.valueOf(summary.getTotalRooms()));
-        totalCapacityLabel.setText(String.valueOf(summary.getTotalCapacity()));
-        occupiedBedsLabel.setText(String.valueOf(summary.getOccupiedBeds()));
-        availableBedsLabel.setText(String.valueOf(summary.getAvailableBeds()));
+        int totalHostels = hostels.size();
+        int totalRooms = hostels.stream().mapToInt(Hostel::getTotalRooms).sum();
+        int totalCapacity = hostels.stream().mapToInt(Hostel::getTotalCapacity).sum();
+        int occupied = hostels.stream().mapToInt(Hostel::getOccupiedBeds).sum();
+        int available = totalCapacity - occupied;
+        double avgRate = totalCapacity > 0 ? (occupied * 100.0 / totalCapacity) : 0;
 
-        bedsPieChart.setData(FXCollections.observableArrayList(
-                new PieChart.Data("Occupied Beds", summary.getOccupiedBeds()),
-                new PieChart.Data("Available Beds", summary.getAvailableBeds())
-        ));
+        lblTotalHostels.setText("Total Hostels: " + totalHostels);
+        lblTotalRooms.setText("Total Rooms: " + totalRooms);
+        lblTotalStudents.setText("Total Students: " + occupied);
+        lblTotalCapacity.setText("Total Capacity: " + totalCapacity);
+        lblOccupiedBeds.setText("Occupied Beds: " + occupied);
+        lblAvailableBeds.setText("Available Beds: " + available);
+        lblAvgOccupancy.setText(String.format("Avg Occupancy: %.2f%%", avgRate));
 
-        hostelTable.setItems(FXCollections.observableArrayList(reportDAO.getHostelBreakdown()));
+        // Populate PieChart
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        for (Hostel h : hostels) {
+            chartData.add(new PieChart.Data(h.getName(), h.getOccupancyRate()));
+        }
+        occupancyChart.setData(chartData);
     }
 
-    private void refreshWithAnimation() {
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(300), contentBox);
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.setOnFinished(e -> {
-            loadReport();
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(300), contentBox);
-            fadeIn.setFromValue(0);
-            fadeIn.setToValue(1);
-            fadeIn.play();
-        });
-        fadeOut.play();
+    private void fadeIn(javafx.scene.Node... nodes) {
+        for (javafx.scene.Node node : nodes) {
+            FadeTransition fade = new FadeTransition(Duration.millis(800), node);
+            fade.setFromValue(0);
+            fade.setToValue(1);
+            fade.play();
+        }
     }
 }
