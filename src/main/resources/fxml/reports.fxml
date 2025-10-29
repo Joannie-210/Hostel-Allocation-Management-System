@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.controllers.ReportsController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #f8f9fa;">
+
+    <!-- HEADER -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 15;">
+            <Label text="📊 Hostel Reports Overview"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+            <Button fx:id="btnRefresh"
+                    text="🔄 Refresh"
+                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;"
+                    HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <!-- We'll fade this VBox on refresh -->
+        <VBox fx:id="contentBox" spacing="30" alignment="CENTER" style="-fx-padding: 20;">
+
+            <!-- SUMMARY CARDS -->
+            <HBox spacing="30" alignment="CENTER">
+                <VBox alignment="CENTER">
+                    <Label text="Total Hostels" />
+                    <Label fx:id="totalHostelsLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label text="Total Rooms" />
+                    <Label fx:id="totalRoomsLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label text="Total Capacity" />
+                    <Label fx:id="totalCapacityLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label text="Occupied Beds" />
+                    <Label fx:id="occupiedBedsLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER">
+                    <Label text="Available Beds" />
+                    <Label fx:id="availableBedsLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                </VBox>
+            </HBox>
+
+            <!-- PIE CHART -->
+            <PieChart fx:id="bedsPieChart" title="Occupancy Overview" prefWidth="400" prefHeight="300" />
+
+            <!-- TABLE -->
+            <TableView fx:id="hostelTable" prefWidth="800" prefHeight="250">
+                <columns>
+                    <TableColumn fx:id="colHostelName" text="Hostel Name" prefWidth="200"/>
+                    <TableColumn fx:id="colTotalRooms" text="Rooms" prefWidth="100"/>
+                    <TableColumn fx:id="colTotalCapacity" text="Capacity" prefWidth="150"/>
+                    <TableColumn fx:id="colOccupied" text="Occupied" prefWidth="150"/>
+                    <TableColumn fx:id="colAvailable" text="Available" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

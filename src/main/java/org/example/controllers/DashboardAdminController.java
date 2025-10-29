@@ -135,7 +135,7 @@ public class DashboardAdminController implements Initializable {
     public void showManageHostels() { headerTitle.setText("Manage Hostels"); loadContent("/fxml/HostelManagement.fxml"); }
     public void showManageRooms() { headerTitle.setText("Manage Rooms"); loadContent("/fxml/RoomManagement.fxml"); }
     public void showAllocateHostels() { headerTitle.setText("Allocate Hostels"); loadContent("/fxml/allocate_room.fxml"); }
-    public void showReports() { headerTitle.setText("Reports"); contentArea.getChildren().setAll(new Text("📄 Generate and view reports")); }
+    public void showReports() { headerTitle.setText("Reports"); loadContent("/fxml/reports.fxml"); }
     public void logout() { System.out.println("Logging out..."); /* TODO: switch scene */ }
 
     // -------------------- FXML loader --------------------
