@@ -7,6 +7,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.dao.HostelDAO;
 import org.example.models.Hostel;
 
+
+
+
 public class HostelController {
 
     // TableView and columns

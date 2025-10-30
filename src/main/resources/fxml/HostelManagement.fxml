@@ -2,10 +2,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+
 <VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.controllers.HostelController">
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
+
+    <!-- SEARCH + EXPORT BAR -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Search:"/>
+        <TextField fx:id="txtSearch" promptText="Search by name, gender, or warden..."/>
+        <Button text="Export CSV" fx:id="btnExportCSV"/>
+        <Button text="Export Excel" fx:id="btnExportExcel"/>
+    </HBox>
 
     <!-- TableView for Hostels -->
     <TableView fx:id="hostelTable" prefHeight="300">

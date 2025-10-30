@@ -1,15 +1,16 @@
 package org.example.controllers;
+
 import org.example.utils.DataChangeNotifier;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.example.dao.StudentDAO;
 import org.example.models.Student;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AdminStudentsController {
 
@@ -22,11 +23,15 @@ public class AdminStudentsController {
     @FXML private TableColumn<Student, String> departmentCol;
     @FXML private TableColumn<Student, String> levelCol;
     @FXML private TableColumn<Student, Integer> roomCol;
-    @FXML private TableColumn<Student, Void> deleteCol; // for Delete button
+    @FXML private TableColumn<Student, Void> deleteCol;
+
+    @FXML private TextField searchField; // make sure fx:id="searchField" in your FXML
+
+    private ObservableList<Student> masterList;
 
     @FXML
     public void initialize() {
-        // Set table column mappings
+        // Set up table columns
         regNoCol.setCellValueFactory(new PropertyValueFactory<>("regNo"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -36,19 +41,44 @@ public class AdminStudentsController {
         levelCol.setCellValueFactory(new PropertyValueFactory<>("level"));
         roomCol.setCellValueFactory(new PropertyValueFactory<>("roomId"));
 
-        // Load students from DB and filter out admins
-        studentTable.setItems(FXCollections.observableArrayList(
+        // Load students from DB (excluding admins)
+        masterList = FXCollections.observableArrayList(
                 StudentDAO.getAllStudents()
                         .stream()
                         .filter(s -> !"admin".equalsIgnoreCase(s.getRole()))
                         .toList()
-        ));
+        );
+
+        // Wrap list in FilteredList for searching
+        FilteredList<Student> filteredData = new FilteredList<>(masterList, p -> true);
+
+        // Add listener for search
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(student -> {
+                if (newValue == null || newValue.isBlank()) return true;
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                // Search by multiple fields
+                return student.getName().toLowerCase().contains(lowerCaseFilter)
+                        || student.getRegNo().toLowerCase().contains(lowerCaseFilter)
+                        || student.getDepartment().toLowerCase().contains(lowerCaseFilter)
+                        || student.getEmail().toLowerCase().contains(lowerCaseFilter)
+                        || student.getPhone().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+
+        // Wrap filtered list in a SortedList for sorting
+        SortedList<Student> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(studentTable.comparatorProperty());
+
+        // Apply to table
+        studentTable.setItems(sortedData);
         studentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Add Delete button column
+        // Add Delete button
         addDeleteButtonToTable();
     }
-
 
     private void addDeleteButtonToTable() {
         Callback<TableColumn<Student, Void>, TableCell<Student, Void>> cellFactory = param -> new TableCell<>() {
@@ -58,12 +88,10 @@ public class AdminStudentsController {
                 btn.setStyle("-fx-background-color: #e53935; -fx-text-fill: white; -fx-background-radius: 5;");
                 btn.setOnAction(event -> {
                     Student student = getTableView().getItems().get(getIndex());
-                    // Delete student from database
                     boolean deleted = StudentDAO.deleteStudent(student.getRegNo());
                     if (deleted) {
-                        // Remove student from table view
-                        getTableView().getItems().remove(student);
-                        DataChangeNotifier.getInstance().notifyDataChanged(); // notify overview
+                        masterList.remove(student); // update main list
+                        DataChangeNotifier.getInstance().notifyDataChanged();
                     }
                 });
             }

@@ -8,6 +8,9 @@ import org.example.models.Student;
 import org.example.utils.PasswordUtil;
 import org.example.utils.SceneUtil;
 import org.example.utils.Session;
+import org.example.utils.ConfigUtil;
+
+import java.util.Optional;
 
 public class LoginController {
 
@@ -38,26 +41,48 @@ public class LoginController {
         // Validate login credentials
         boolean valid = UserDAO.validateLogin(username, hashed, role);
 
-        if (valid) {
-            messageLabel.setText("✅ Login successful");
+        if (!valid) {
+            messageLabel.setText("❌ Invalid credentials");
+            return;
+        }
 
-            if (role.equals("Student")) {
-                Student student = UserDAO.getStudentByUsername(username);
+        if (role.equalsIgnoreCase("Admin")) {
+            // 🔒 Load admin passcode from config.properties
+            String adminPasscode = ConfigUtil.getProperty("admin.passcode");
 
-                if (student != null) {
-                    Session.setCurrentStudent(student); // store logged-in student
-                    SceneUtil.switchScene(event, "/fxml/dashboard_student.fxml");
-                } else {
-                    messageLabel.setText("❌ Could not load student info");
-                }
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Admin Verification");
+            dialog.setHeaderText("Enter the Admin Passcode");
+            dialog.setContentText("Passcode:");
 
-            } else { // Admin
-                Session.clear(); // no student stored for admin
-                SceneUtil.switchScene(event, "/fxml/dashboard_admin.fxml");
+            Optional<String> result = dialog.showAndWait();
+            if (result.isEmpty()) {
+                messageLabel.setText("❌ Login cancelled");
+                return;
             }
 
-        } else {
-            messageLabel.setText("❌ Invalid credentials");
+            String enteredPasscode = result.get().trim();
+
+            if (!enteredPasscode.equals(adminPasscode)) {
+                messageLabel.setText("❌ Incorrect Admin Passcode");
+                return;
+            }
+
+            // ✅ Correct admin passcode
+            Session.clear();
+            SceneUtil.switchScene(event, "/fxml/dashboard_admin.fxml");
+            messageLabel.setText("✅ Welcome, Admin!");
+        }
+        else {
+            // ✅ Student login
+            Student student = UserDAO.getStudentByUsername(username);
+
+            if (student != null) {
+                Session.setCurrentStudent(student);
+                SceneUtil.switchScene(event, "/fxml/dashboard_student.fxml");
+            } else {
+                messageLabel.setText("❌ Could not load student info");
+            }
         }
     }
 
